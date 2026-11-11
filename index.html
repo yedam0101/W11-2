@@ -1,0 +1,956 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autumn Painting Writing Workshop</title>
+<style>
+:root{
+  --orange:#ed8546;
+  --blue:#487fbc;
+  --green:#278b73;
+  --ink:#27384b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#fff6eb;
+  font-family:Arial,"Malgun Gothic",sans-serif;
+  color:var(--ink);
+  line-height:1.65;
+}
+header{
+  text-align:center;
+  background:linear-gradient(120deg,#ffe3a9,#ffbda9);
+  padding:25px 15px;
+}
+h1{margin:0;font-size:clamp(26px,5vw,40px)}
+main{max-width:1050px;margin:auto;padding:16px}
+.art{
+  text-align:center;
+  background:white;
+  padding:14px;
+  border-radius:18px;
+}
+.art img{
+  display:block;
+  width:100%;
+  max-height:360px;
+  object-fit:contain;
+  border-radius:12px;
+}
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin:20px 0;
+}
+button{
+  border:0;
+  border-radius:10px;
+  padding:11px 16px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  background:#e9edf3;
+  color:var(--ink);
+}
+button.active,.primary{background:var(--orange);color:white}
+.blue{background:var(--blue);color:white}
+.green{background:var(--green);color:white}
+section{
+  display:none;
+  background:white;
+  border-radius:18px;
+  padding:24px;
+}
+section.active{display:block}
+.question{
+  background:#fffaf2;
+  border:1px solid #efdfc8;
+  border-radius:14px;
+  padding:18px;
+  margin:16px 0;
+}
+.question strong{font-size:19px}
+.hint{color:#69788c;font-size:15px}
+input,textarea{
+  width:100%;
+  padding:12px;
+  border:2px solid #dfe2e8;
+  border-radius:10px;
+  font-size:18px;
+  font-family:inherit;
+}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:var(--orange);
+}
+textarea{min-height:110px;resize:vertical}
+.blank{
+  width:135px;
+  display:inline-block;
+  margin:4px;
+}
+.template{
+  font-size:20px;
+  line-height:2.6;
+}
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:20px;
+}
+.feedback{
+  background:#eef7f4;
+  border-radius:12px;
+  padding:15px;
+  margin:12px 0;
+  white-space:pre-wrap;
+}
+.original{
+  background:#fff0ed;
+  padding:12px;
+  border-radius:10px;
+  white-space:pre-wrap;
+}
+.shadow{
+  border-bottom:1px solid #e6e6e6;
+  padding:15px 0;
+}
+.shadow p{font-size:20px}
+#paragraph{min-height:250px}
+small{color:#64748b}
+footer{text-align:center;padding:25px}
+.hint-button{
+  background:#fff0ce;
+  color:#80591c;
+  border:1px solid #efce91;
+  margin:10px 0;
+}
+.hint-content{
+  display:none;
+  background:#fff2d8;
+  border-left:4px solid #e6a64b;
+  padding:12px 15px;
+  margin:8px 0 15px;
+  border-radius:8px;
+  color:#74501d;
+  font-size:17px;
+}
+.hint-content.visible{display:block}
+.extra-sentence{
+  background:#f2f5ff;
+  border:1px solid #d9e2fa;
+}
+#imageError{color:#a44b31}
+@media(max-width:600px){
+  section{padding:15px}
+  .blank{width:95px}
+  .template{font-size:17px}
+}
+</style>
+</head>
+
+<body>
+<header>
+<h1>🍂 Autumn Painting</h1>
+<p>Look · Think · Write · Improve · Speak</p>
+</header>
+
+<main>
+
+<div class="art">
+<img src="가을.PNG" alt="Autumn landscape painting"
+onerror="document.getElementById('imageError').hidden=false">
+<p id="imageError" hidden>
+그림을 표시하려면 '가을.PNG' 파일을
+HTML 파일과 같은 폴더에 넣어 주세요.
+</p>
+</div>
+
+<nav>
+<button class="active" onclick="go(0)">1. Brainstorm</button>
+<button onclick="go(1)">2. Fill Blanks</button>
+<button onclick="go(2)">3. Sentences</button>
+<button onclick="go(3)">4. Paragraph</button>
+<button onclick="go(4)">5. Feedback</button>
+<button onclick="go(5)">6. Shadowing</button>
+</nav>
+
+<section class="active">
+<h2>💡 Step 1. Brainstorming</h2>
+<p>Look at the painting and write short answers.</p>
+<p class="hint">
+그림을 자세히 보고 단어나 짧은 표현으로 답해 보세요.
+</p>
+<div id="brain"></div>
+<div class="actions">
+<button class="primary" onclick="go(1)">Next →</button>
+</div>
+</section>
+
+<section>
+<h2>🧩 Step 2. Fill in the Blanks</h2>
+<p>Complete the sentences using your ideas.</p>
+
+<div class="question">
+<strong>1. What can you see in the picture?</strong>
+<div class="template">
+In the picture, I can see
+<input class="blank" id="b0">,
+<input class="blank" id="b1">
+and
+<input class="blank" id="b2">.
+</div>
+</div>
+
+<div class="question">
+<strong>2. Where do you think this was drawn, and who drew it?</strong>
+<div class="template">
+I think
+<input class="blank" id="b3">
+drew this picture in
+<input class="blank" id="b4">.
+</div>
+</div>
+
+<div class="question">
+<strong>3. What can we find on land?</strong>
+<div class="template">
+On land, there is a
+<input class="blank" id="b5">.
+</div>
+</div>
+
+<div class="question">
+<strong>4. What do you think we can find underwater?</strong>
+<div class="template">
+I imagine there are lots of
+<input class="blank" id="b6">
+underwater.
+</div>
+</div>
+
+<button class="blue" onclick="showTemplates()">
+Check My Sentences
+</button>
+<div id="templateResult" class="feedback" hidden></div>
+
+<div class="actions">
+<button onclick="go(0)">← Back</button>
+<button class="primary" onclick="go(2)">Next →</button>
+</div>
+</section>
+
+<section>
+<h2>✏️ Step 3. Write One Sentence</h2>
+<p>Write a complete English sentence for each question.</p>
+<p class="hint">
+먼저 스스로 영어 문장을 작성해 보세요.
+어려울 때만 한국어 힌트를 확인해 보세요!
+</p>
+
+<div id="sentenceQuestions"></div>
+
+<div class="question extra-sentence">
+<strong>5. Express Your Opinion</strong>
+<p class="template">
+I think the artist drew this picture because ...
+</p>
+<button class="hint-button" onclick="toggleHint(4)">
+💡 한국어 힌트 보기
+</button>
+<div class="hint-content" id="hint4">
+나는 화가가 ( ) 때문에 이 그림을 그렸다고 생각해.
+</div>
+<textarea id="sentence4"
+placeholder="I think the artist drew this picture because..."
+oninput="saveAll()"></textarea>
+</div>
+
+<div class="actions">
+<button onclick="go(1)">← Back</button>
+<button class="primary" onclick="go(3)">Next →</button>
+</div>
+</section>
+
+<section>
+<h2>📝 Step 4. My Own Paragraph</h2>
+<p>Use the questions and your opinion to write your own paragraph.</p>
+<div id="paragraphQuestions"></div>
+
+<p><strong>5. Express Your Opinion</strong></p>
+<p>I think the artist drew this picture because ...</p>
+
+<textarea id="paragraph"
+placeholder="In the picture, I can see..."
+oninput="saveAll()"></textarea>
+
+<div class="actions">
+<button class="blue" onclick="bringSentences()">
+Bring My Sentences
+</button>
+<button class="green" onclick="saveAll();alert('Saved!')">
+Save
+</button>
+</div>
+
+<div class="actions">
+<button onclick="go(2)">← Back</button>
+<button class="primary" onclick="go(4)">
+Get Grammar Feedback →
+</button>
+</div>
+</section>
+
+<section>
+<h2>🌟 Step 5. Grammar Feedback</h2>
+<p>Compare your original writing with the corrected version.</p>
+<p class="hint">
+작성한 글의 문법 오류를 확인하고 수정된 문장을 살펴보세요.
+</p>
+
+<h3>My Original Writing</h3>
+<div id="originalWriting" class="original"></div>
+
+<h3>Grammar Feedback</h3>
+<div id="grammarFeedback"></div>
+
+<h3>My Corrected Writing</h3>
+<p class="hint">
+자동 수정 결과를 확인하고 필요한 부분은 직접 고쳐 보세요.
+</p>
+<textarea id="correctedWriting" oninput="saveAll()"></textarea>
+
+<p><small>
+자동 교정은 기본적인 문법 규칙을 사용합니다.
+모든 오류를 발견하거나 정확하게 수정하지는 못합니다.
+</small></p>
+
+<div class="actions">
+<button onclick="go(3)">← Back</button>
+<button class="primary" onclick="go(5)">
+Practice Shadowing →
+</button>
+</div>
+</section>
+
+<section>
+<h2>🎧 Step 6. Shadowing Practice</h2>
+<p>Listen to your corrected sentences and repeat.</p>
+<p class="hint">
+피드백을 반영한 문장을 듣고 따라 읽어 보세요.
+</p>
+
+<label for="speed">Speaking Speed:</label>
+<select id="speed" style="padding:10px;border-radius:10px">
+<option value="0.65">Slow</option>
+<option value="0.85">A Little Slow</option>
+<option value="1" selected>Normal</option>
+<option value="1.15">Fast</option>
+</select>
+
+<div id="shadowList"></div>
+
+<div class="actions">
+<button class="blue" onclick="speakAll()">
+▶ Listen to All
+</button>
+<button onclick="speechSynthesis.cancel()">
+■ Stop
+</button>
+</div>
+
+<h3>🎙️ Record Your Voice</h3>
+<p>Read your corrected paragraph aloud.</p>
+
+<div class="actions">
+<button class="green" onclick="startRecording()">
+● Start Recording
+</button>
+<button onclick="stopRecording()">
+■ Stop Recording
+</button>
+<button class="blue" onclick="playRecording()">
+▶ Play My Voice
+</button>
+</div>
+
+<p id="recordStatus">Ready to record.</p>
+<audio id="recordedAudio" controls hidden style="width:100%"></audio>
+
+<h3>My Reflection</h3>
+<textarea id="reflection"
+placeholder="What did you learn?"
+oninput="saveAll()"></textarea>
+
+<div class="actions">
+<button onclick="go(4)">← Back</button>
+<button class="green" onclick="downloadWriting()">
+Download My Writing
+</button>
+</div>
+</section>
+
+</main>
+<footer>🍁 Autumn English Writing Workshop</footer>
+
+<script>
+const questions=[
+"What can you see in the picture?",
+"Where do you think this was drawn, and who drew it?",
+"What can we find on land?",
+"What do you think we can find underwater?"
+];
+
+const hints=[
+"그림에서 나는 ( ), ( ), ( )를 볼 수 있어.",
+"나는 ( )가 ( )에서 이 그림을 그렸다고 생각해.",
+"땅 위에는 ( )가 하나 있어.",
+"나는 물속에 많은 ( )가 있을 거라고 상상해.",
+"나는 화가가 ( ) 때문에 이 그림을 그렸다고 생각해."
+];
+
+const brainHints=[
+"나무, 물, 하늘, 색깔 등을 떠올려 보세요.",
+"그림을 그린 사람과 장소를 추측해 보세요.",
+"땅 위에서 볼 수 있는 것을 생각해 보세요.",
+"물속에 무엇이 있을지 상상해 보세요."
+];
+
+let mediaRecorder=null;
+let chunks=[];
+let recordingURL=null;
+let stream=null;
+let feedbackGenerated=false;
+
+function value(id){
+ return (document.getElementById(id)?.value||"").trim();
+}
+
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",
+ '"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function buildQuestions(){
+ questions.forEach((q,i)=>{
+ document.getElementById("brain").innerHTML+=`
+ <div class="question">
+ <strong>${i+1}. ${q}</strong>
+ <p class="hint">${brainHints[i]}</p>
+ <input id="idea${i}" placeholder="Write a short answer..."
+ oninput="saveAll()">
+ </div>`;
+
+ document.getElementById("sentenceQuestions").innerHTML+=`
+ <div class="question">
+ <strong>${i+1}. ${q}</strong>
+ <button class="hint-button" onclick="toggleHint(${i})">
+ 💡 한국어 힌트 보기
+ </button>
+ <div class="hint-content" id="hint${i}">
+ ${hints[i]}
+ </div>
+ <textarea id="sentence${i}"
+ placeholder="Write one complete sentence..."
+ oninput="saveAll()"></textarea>
+ </div>`;
+
+ document.getElementById("paragraphQuestions").innerHTML+=`
+ <p><strong>${i+1}.</strong> ${q}</p>`;
+ });
+}
+
+buildQuestions();
+
+function toggleHint(i){
+ const hint=document.getElementById("hint"+i);
+ const button=hint.previousElementSibling;
+ const visible=hint.classList.toggle("visible");
+
+ button.textContent=visible
+ ? "💡 한국어 힌트 숨기기"
+ : "💡 한국어 힌트 보기";
+}
+
+function go(n){
+ saveAll();
+ document.querySelectorAll("section").forEach((s,i)=>{
+ s.classList.toggle("active",i===n);
+ });
+ document.querySelectorAll("nav button").forEach((b,i)=>{
+ b.classList.toggle("active",i===n);
+ });
+ if(n===4)grammarFeedback();
+ if(n===5)buildShadowing();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showTemplates(){
+ const values=Array.from({length:7},(_,i)=>value("b"+i));
+ const result=document.getElementById("templateResult");
+ result.hidden=false;
+
+ if(values.some(x=>!x)){
+ result.textContent="Please complete all the blanks first.";
+ return;
+ }
+
+ result.textContent=[
+ `In the picture, I can see ${values[0]}, ${values[1]} and ${values[2]}.`,
+ `I think ${values[3]} drew this picture in ${values[4]}.`,
+ `On land, there is a ${values[5]}.`,
+ `I imagine there are lots of ${values[6]} underwater.`
+ ].join("\n\n");
+
+ saveAll();
+}
+
+function bringSentences(){
+ const sentences=Array.from({length:5},(_,i)=>value("sentence"+i))
+ .filter(Boolean);
+
+ if(!sentences.length){
+ alert("Please complete Step 3 first.");
+ return;
+ }
+
+ document.getElementById("paragraph").value=sentences.join("\n");
+ saveAll();
+}
+
+function splitSentences(text){
+ return text.replace(/\r/g,"")
+ .split(/(?<=[.!?])\s+|\n+/)
+ .map(s=>s.trim()).filter(Boolean);
+}
+
+function correctGrammar(text){
+ let result=text.trim();
+ const changes=[];
+
+ function replaceRule(regex,replacement,reason){
+  const before=result;
+  result=result.replace(regex,replacement);
+  if(before!==result&&!changes.includes(reason)){
+   changes.push(reason);
+  }
+ }
+
+ replaceRule(
+ /\bi can see\b/gi,
+ "I can see",
+ "영어의 주어 I는 항상 대문자로 씁니다."
+ );
+
+ replaceRule(
+ /\bi think\b/gi,
+ "I think",
+ "I think에서 I는 대문자로 씁니다."
+ );
+
+ replaceRule(
+ /\bi imagine\b/gi,
+ "I imagine",
+ "영어의 주어 I는 항상 대문자로 씁니다."
+ );
+
+ replaceRule(
+ /\bthere is (trees|leaves|flowers|rocks|stones|fish|plants)\b/gi,
+ (m,n)=>"there are "+n,
+ "복수 명사에는 there are를 사용합니다."
+ );
+
+ replaceRule(
+ /\bthere are (a|an) ([a-z]+)/gi,
+ (m,a,n)=>"there is "+a+" "+n,
+ "a/an이 붙은 단수 명사에는 there is를 사용합니다."
+ );
+
+ replaceRule(
+ /\bthere is lots of (trees|leaves|flowers|fish|plants|rocks)\b/gi,
+ (m,n)=>"there are lots of "+n,
+ "복수 명사 앞에서는 there are lots of를 사용합니다."
+ );
+
+ replaceRule(
+ /\bI can sees\b/gi,
+ "I can see",
+ "조동사 can 다음에는 동사원형을 사용합니다."
+ );
+
+ replaceRule(
+ /\bcan saw\b/gi,
+ "can see",
+ "can 다음에는 동사원형 see를 사용합니다."
+ );
+
+ replaceRule(
+ /\bcan seeing\b/gi,
+ "can see",
+ "can 다음에는 동사원형을 사용합니다."
+ );
+
+ replaceRule(
+ /\bI am think\b/gi,
+ "I think",
+ "의견을 말할 때는 일반적으로 I think를 사용합니다."
+ );
+
+ replaceRule(
+ /\bI am imagine\b/gi,
+ "I imagine",
+ "의견이나 상상을 표현할 때 I imagine을 사용할 수 있습니다."
+ );
+
+ replaceRule(
+ /\bI think ([A-Za-z]+) draw this picture\b/gi,
+ (m,name)=>"I think "+name+" drew this picture",
+ "과거에 그림을 그렸다는 의미라면 draw의 과거형 drew를 사용합니다."
+ );
+
+ replaceRule(
+ /\bthe artist draw this picture\b/gi,
+ "the artist drew this picture",
+ "과거에 그린 그림을 말할 때 draw의 과거형 drew를 사용합니다."
+ );
+
+ replaceRule(
+ /\bI imagine there is lots of\b/gi,
+ "I imagine there are lots of",
+ "lots of 뒤에 복수 명사가 오는 경우 there are를 사용합니다."
+ );
+
+ replaceRule(
+ /\bbecause of (he|she|they) (like|love|want)\b/gi,
+ (m,person,verb)=>"because "+person+" "+verb,
+ "because 뒤에는 주어와 동사가 있는 절을 사용할 수 있습니다."
+ );
+
+ replaceRule(
+ /\bunder the water\b/gi,
+ "underwater",
+ "물속을 나타내는 부사로 underwater를 사용할 수 있습니다."
+ );
+
+ replaceRule(
+ /\bon the land\b/gi,
+ "on land",
+ "일반적으로 육지를 뜻할 때 on land를 사용할 수 있습니다."
+ );
+
+ replaceRule(
+ /\bI see a trees\b/gi,
+ "I see trees",
+ "복수 명사 trees 앞에는 a를 사용하지 않습니다."
+ );
+
+ replaceRule(
+ /\ba orange\b/gi,
+ "an orange",
+ "orange 앞에는 an을 사용합니다."
+ );
+
+ replaceRule(
+ /\ba apple\b/gi,
+ "an apple",
+ "apple 앞에는 an을 사용합니다."
+ );
+
+ replaceRule(
+ /\ba autumn\b/gi,
+ "an autumn",
+ "autumn 앞에는 an을 사용합니다."
+ );
+
+ replaceRule(
+ /\ba artist\b/gi,
+ "an artist",
+ "artist 앞에는 an을 사용합니다."
+ );
+
+ result=result.replace(/\s+([,.!?])/g,"$1")
+ .replace(/([,.!?])(?=[A-Za-z])/g,"$1 ");
+
+ result=result.replace(/(^|[.!?]\s+|\n)([a-z])/g,
+ (m,start,letter)=>start+letter.toUpperCase());
+
+ if(result&&!/[.!?]$/.test(result)){
+ result+=".";
+ changes.push("문장 끝에 마침표를 넣었습니다.");
+ }
+
+ return {text:result,changes};
+}
+
+function grammarFeedback(){
+ const original=value("paragraph");
+ const originalBox=document.getElementById("originalWriting");
+ const feedbackBox=document.getElementById("grammarFeedback");
+ const correctedBox=document.getElementById("correctedWriting");
+
+ originalBox.textContent=original||"Please write your paragraph first.";
+ feedbackBox.innerHTML="";
+
+ if(!original)return;
+
+ const result=correctGrammar(original);
+ const previousSource=correctedBox.dataset.source||"";
+
+ if(!feedbackGenerated||previousSource!==original){
+  correctedBox.value=result.text;
+  correctedBox.dataset.source=original;
+  feedbackGenerated=true;
+ }
+
+ if(result.changes.length===0){
+  feedbackBox.innerHTML=`
+  <div class="feedback">
+  기본 규칙으로 탐지된 문법 오류가 없습니다.
+  다만 모든 문법이 정확하다는 뜻은 아닙니다.
+  </div>`;
+ }else{
+  result.changes.forEach((note,i)=>{
+   const div=document.createElement("div");
+   div.className="feedback";
+   div.textContent=(i+1)+". "+note;
+   feedbackBox.appendChild(div);
+  });
+ }
+
+ const originalSentences=splitSentences(original);
+ const correctedSentences=splitSentences(result.text);
+
+ const title=document.createElement("h3");
+ title.textContent="Original → Corrected";
+ feedbackBox.appendChild(title);
+
+ const count=Math.max(
+ originalSentences.length,
+ correctedSentences.length
+ );
+
+ for(let i=0;i<count;i++){
+  const old=originalSentences[i]||"";
+  const now=correctedSentences[i]||"";
+  const div=document.createElement("div");
+  div.className="question";
+  div.innerHTML=`
+  <p><strong>Original:</strong> ${escapeHTML(old)}</p>
+  <p><strong>Corrected:</strong> ${escapeHTML(now)}</p>`;
+  feedbackBox.appendChild(div);
+ }
+
+ const note=document.createElement("p");
+ note.className="hint";
+ note.textContent=
+ "이 피드백은 제한된 규칙 기반 교정입니다. " +
+ "자동 교정되지 않은 오류는 수정문 입력칸에서 직접 고쳐 주세요.";
+ feedbackBox.appendChild(note);
+
+ saveAll();
+}
+
+function buildShadowing(){
+ const text=value("correctedWriting");
+ const list=document.getElementById("shadowList");
+ list.innerHTML="";
+
+ if(!text){
+ list.textContent="Please complete your corrected writing first.";
+ return;
+ }
+
+ const sentences=splitSentences(text);
+
+ sentences.forEach((sentence,i)=>{
+  const div=document.createElement("div");
+  div.className="shadow";
+
+  const p=document.createElement("p");
+  p.textContent=(i+1)+". "+sentence;
+
+  const button=document.createElement("button");
+  button.className="blue";
+  button.textContent="▶ Listen";
+  button.onclick=()=>speak(sentence);
+
+  const repeat=document.createElement("button");
+  repeat.textContent="🔁 Repeat";
+  repeat.onclick=()=>speak(sentence);
+
+  div.append(p,button,document.createTextNode(" "),repeat);
+  list.appendChild(div);
+ });
+}
+
+function speak(text){
+ if(!("speechSynthesis" in window)){
+ alert("Speech synthesis is not supported.");
+ return;
+ }
+
+ speechSynthesis.cancel();
+
+ const utterance=new SpeechSynthesisUtterance(text);
+ utterance.lang="en-US";
+ utterance.rate=Number(value("speed"))||1;
+
+ const voices=speechSynthesis.getVoices();
+ const voice=voices.find(v=>v.lang==="en-US")||
+ voices.find(v=>v.lang.startsWith("en"));
+
+ if(voice)utterance.voice=voice;
+ speechSynthesis.speak(utterance);
+}
+
+function speakAll(){
+ const text=value("correctedWriting");
+ if(text)speak(text);
+}
+
+async function startRecording(){
+ const status=document.getElementById("recordStatus");
+
+ if(!navigator.mediaDevices?.getUserMedia||
+ !window.MediaRecorder){
+ status.textContent=
+ "Recording requires a supported browser and secure environment.";
+ return;
+ }
+
+ try{
+  if(mediaRecorder?.state==="recording")return;
+
+  stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  chunks=[];
+  mediaRecorder=new MediaRecorder(stream);
+
+  mediaRecorder.ondataavailable=e=>{
+   if(e.data.size)chunks.push(e.data);
+  };
+
+  mediaRecorder.onstop=()=>{
+   const blob=new Blob(chunks,{
+    type:mediaRecorder.mimeType||"audio/webm"
+   });
+
+   if(recordingURL)URL.revokeObjectURL(recordingURL);
+   recordingURL=URL.createObjectURL(blob);
+
+   const audio=document.getElementById("recordedAudio");
+   audio.src=recordingURL;
+   audio.hidden=false;
+
+   stream.getTracks().forEach(t=>t.stop());
+   status.textContent="Recording complete!";
+  };
+
+  mediaRecorder.start();
+  status.textContent="🔴 Recording...";
+ }catch(e){
+  status.textContent="Microphone permission was denied or unavailable.";
+ }
+}
+
+function stopRecording(){
+ if(mediaRecorder?.state==="recording"){
+  mediaRecorder.stop();
+ }
+}
+
+function playRecording(){
+ const audio=document.getElementById("recordedAudio");
+ if(!audio.src){
+  alert("Please record your voice first.");
+  return;
+ }
+ audio.play();
+}
+
+function saveAll(){
+ const data={};
+
+ for(let i=0;i<4;i++){
+  data["idea"+i]=value("idea"+i);
+ }
+
+ for(let i=0;i<5;i++){
+  data["sentence"+i]=value("sentence"+i);
+ }
+
+ for(let i=0;i<7;i++){
+  data["b"+i]=value("b"+i);
+ }
+
+ data.paragraph=value("paragraph");
+ data.correctedWriting=value("correctedWriting");
+ data.reflection=value("reflection");
+
+ try{
+  localStorage.setItem("autumnWritingData",JSON.stringify(data));
+ }catch(e){}
+}
+
+function restore(){
+ try{
+  const data=JSON.parse(
+   localStorage.getItem("autumnWritingData")||"{}"
+  );
+
+  Object.entries(data).forEach(([id,v])=>{
+   const element=document.getElementById(id);
+   if(element)element.value=v;
+  });
+
+  if(data.correctedWriting){
+   feedbackGenerated=true;
+   document.getElementById("correctedWriting").dataset.source=
+   data.paragraph||"";
+  }
+ }catch(e){}
+}
+
+function downloadWriting(){
+ const content=[
+ "AUTUMN PAINTING WRITING",
+ "",
+ "Original Writing:",
+ value("paragraph"),
+ "",
+ "Corrected Writing:",
+ value("correctedWriting"),
+ "",
+ "Reflection:",
+ value("reflection")
+ ].join("\n");
+
+ const blob=new Blob([content],{
+  type:"text/plain;charset=utf-8"
+ });
+
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="My_Autumn_Writing.txt";
+ a.click();
+
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+document.querySelectorAll(".blank").forEach(el=>{
+ el.addEventListener("input",saveAll);
+});
+
+restore();
+</script>
+</body>
+</html>
